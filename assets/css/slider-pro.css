@@ -266,6 +266,13 @@
         transform: translateX(-100%) !important;
     }
 
+    /* Show buttons on active slide (mobile uses .active not .coverflow-center) */
+    .tpf-slider[data-transition="coverflow"] .tpf-slide.active .tpf-enlarge-btn,
+    .tpf-slider[data-transition="coverflow"] .tpf-slide.active .tpf-info-btn {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+
     /* Flip and Cube: use standard slide transition */
     .tpf-slider[data-transition="flip"] .tpf-slide,
     .tpf-slider[data-transition="cube"] .tpf-slide {
