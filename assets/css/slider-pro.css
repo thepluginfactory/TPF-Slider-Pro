@@ -92,13 +92,14 @@
     transform: translateY(0) !important;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition: opacity 0.3s ease, visibility 0s 0.3s; /* visibility changes after fade completes */
 }
 
 /* Show text overlay when info is active */
 .tpf-slider[data-transition="coverflow"] .tpf-slide.tpf-info-active .tpf-slide-content {
     opacity: 1;
     visibility: visible;
+    transition: opacity 0.3s ease, visibility 0s 0s; /* visibility changes immediately */
 }
 
 /* Show enlarge and info buttons on center slide */
