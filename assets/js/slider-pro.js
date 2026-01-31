@@ -354,6 +354,8 @@
                 }, speed);
             }
 
+            // Mark as initialized - CSS uses this to enable transitions
+            $slider.attr('data-mobile-init', 'true');
             $slider.data('tpf-pro-initialized', true);
         }
     };

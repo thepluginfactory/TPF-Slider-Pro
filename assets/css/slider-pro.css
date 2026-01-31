@@ -222,6 +222,19 @@
         display: block !important;
     }
 
+    /* Hide all slides initially to prevent flash during init */
+    .tpf-slider[data-transition="coverflow"]:not([data-mobile-init]) .tpf-slide {
+        opacity: 0 !important;
+        visibility: hidden !important;
+        transform: none !important;
+    }
+
+    /* Show first slide before JS init */
+    .tpf-slider[data-transition="coverflow"]:not([data-mobile-init]) .tpf-slide:first-child {
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
     /* Coverflow: FORCE reset all desktop styles */
     .tpf-slider[data-transition="coverflow"] .tpf-slide {
         position: absolute !important;
