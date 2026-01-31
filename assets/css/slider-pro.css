@@ -87,26 +87,29 @@
     z-index: 5;
 }
 
-/* Text overlay on coverflow - fade only, no slide movement */
+/* Text overlay on coverflow - hidden until info clicked */
 .tpf-slider[data-transition="coverflow"] .tpf-slide .tpf-slide-content {
     transform: translateY(0) !important;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-/* Fade in text overlay on center slide after it settles */
-.tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-center .tpf-slide-content {
+/* Show text overlay when info is active */
+.tpf-slider[data-transition="coverflow"] .tpf-slide.tpf-info-active .tpf-slide-content {
     opacity: 1;
-    transition: opacity 0.4s ease 0.35s;
+    visibility: visible;
 }
 
-/* Show enlarge button on center slide */
-.tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-center .tpf-enlarge-btn {
+/* Show enlarge and info buttons on center slide */
+.tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-center .tpf-enlarge-btn,
+.tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-center .tpf-info-btn {
     opacity: 1;
 }
 
-/* Hide enlarge button on non-center slides */
-.tpf-slider[data-transition="coverflow"] .tpf-slide:not(.coverflow-center) .tpf-enlarge-btn {
+/* Hide buttons on non-center slides */
+.tpf-slider[data-transition="coverflow"] .tpf-slide:not(.coverflow-center) .tpf-enlarge-btn,
+.tpf-slider[data-transition="coverflow"] .tpf-slide:not(.coverflow-center) .tpf-info-btn {
     opacity: 0 !important;
     pointer-events: none;
 }
