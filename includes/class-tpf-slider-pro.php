@@ -76,6 +76,8 @@ class TPF_Slider_Pro {
         $defaults['subtitle_color'] = '#ffffff';
         $defaults['button_bg_color'] = '#ffffff';
         $defaults['button_text_color'] = '#333333';
+        $defaults['arrow_bg_color'] = '#ffffff';
+        $defaults['arrow_icon_color'] = '#333333';
         return $defaults;
     }
 
@@ -124,6 +126,18 @@ class TPF_Slider_Pro {
                 <input type="color" name="button_text_color" value="<?php echo esc_attr($settings['button_text_color']); ?>">
             </td>
         </tr>
+        <tr>
+            <th>Arrow Background</th>
+            <td>
+                <input type="color" name="arrow_bg_color" value="<?php echo esc_attr($settings['arrow_bg_color']); ?>">
+            </td>
+        </tr>
+        <tr>
+            <th>Arrow Icon Color</th>
+            <td>
+                <input type="color" name="arrow_icon_color" value="<?php echo esc_attr($settings['arrow_icon_color']); ?>">
+            </td>
+        </tr>
         <?php
     }
 
@@ -135,6 +149,8 @@ class TPF_Slider_Pro {
         $settings['subtitle_color'] = isset($post_data['subtitle_color']) ? sanitize_hex_color($post_data['subtitle_color']) : '#ffffff';
         $settings['button_bg_color'] = isset($post_data['button_bg_color']) ? sanitize_hex_color($post_data['button_bg_color']) : '#ffffff';
         $settings['button_text_color'] = isset($post_data['button_text_color']) ? sanitize_hex_color($post_data['button_text_color']) : '#333333';
+        $settings['arrow_bg_color'] = isset($post_data['arrow_bg_color']) ? sanitize_hex_color($post_data['arrow_bg_color']) : '#ffffff';
+        $settings['arrow_icon_color'] = isset($post_data['arrow_icon_color']) ? sanitize_hex_color($post_data['arrow_icon_color']) : '#333333';
         return $settings;
     }
 
@@ -152,6 +168,16 @@ class TPF_Slider_Pro {
             #{$unique_id} .tpf-slide-button {
                 background: {$settings['button_bg_color']} !important;
                 color: {$settings['button_text_color']} !important;
+            }
+            #{$unique_id} .tpf-arrow {
+                background: {$settings['arrow_bg_color']} !important;
+            }
+            #{$unique_id} .tpf-arrow:hover {
+                background: {$settings['arrow_bg_color']} !important;
+                filter: brightness(0.95);
+            }
+            #{$unique_id} .tpf-arrow svg {
+                stroke: {$settings['arrow_icon_color']} !important;
             }
         ";
         return $styles . $pro_styles;
