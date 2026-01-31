@@ -108,37 +108,37 @@ class TPF_Slider_Pro {
         <tr>
             <th>Title Color</th>
             <td>
-                <input type="color" name="title_color" value="<?php echo esc_attr($settings['title_color']); ?>">
+                <input type="text" name="title_color" value="<?php echo esc_attr($settings['title_color']); ?>" class="tpf-color-picker">
             </td>
         </tr>
         <tr>
             <th>Subtitle Color</th>
             <td>
-                <input type="color" name="subtitle_color" value="<?php echo esc_attr($settings['subtitle_color']); ?>">
+                <input type="text" name="subtitle_color" value="<?php echo esc_attr($settings['subtitle_color']); ?>" class="tpf-color-picker">
             </td>
         </tr>
         <tr>
-            <th>Button Background</th>
+            <th>Link Button Color</th>
             <td>
-                <input type="color" name="button_bg_color" value="<?php echo esc_attr($settings['button_bg_color']); ?>">
+                <input type="text" name="button_bg_color" value="<?php echo esc_attr($settings['button_bg_color']); ?>" class="tpf-color-picker">
             </td>
         </tr>
         <tr>
-            <th>Button Text Color</th>
+            <th>Link Text Color</th>
             <td>
-                <input type="color" name="button_text_color" value="<?php echo esc_attr($settings['button_text_color']); ?>">
+                <input type="text" name="button_text_color" value="<?php echo esc_attr($settings['button_text_color']); ?>" class="tpf-color-picker">
             </td>
         </tr>
         <tr>
-            <th>Arrow Background</th>
+            <th>Arrow Button Color</th>
             <td>
-                <input type="color" name="arrow_bg_color" value="<?php echo esc_attr($settings['arrow_bg_color']); ?>">
+                <input type="text" name="arrow_bg_color" value="<?php echo esc_attr($settings['arrow_bg_color']); ?>" class="tpf-color-picker">
             </td>
         </tr>
         <tr>
-            <th>Arrow Icon Color</th>
+            <th>Arrow Color</th>
             <td>
-                <input type="color" name="arrow_icon_color" value="<?php echo esc_attr($settings['arrow_icon_color']); ?>">
+                <input type="text" name="arrow_icon_color" value="<?php echo esc_attr($settings['arrow_icon_color']); ?>" class="tpf-color-picker">
             </td>
         </tr>
         <?php
@@ -227,11 +227,22 @@ class TPF_Slider_Pro {
             return;
         }
 
+        // Enqueue WordPress color picker
+        wp_enqueue_style('wp-color-picker');
+
         wp_enqueue_style(
             'tpf-slider-pro-admin',
             TPF_SLIDER_PRO_PLUGIN_URL . 'assets/css/admin-pro.css',
-            array('tpf-slider-admin'),
+            array('tpf-slider-admin', 'wp-color-picker'),
             TPF_SLIDER_PRO_VERSION
+        );
+
+        wp_enqueue_script(
+            'tpf-slider-pro-admin',
+            TPF_SLIDER_PRO_PLUGIN_URL . 'assets/js/admin-pro.js',
+            array('jquery', 'wp-color-picker'),
+            TPF_SLIDER_PRO_VERSION,
+            true
         );
     }
 
