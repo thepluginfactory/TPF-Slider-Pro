@@ -57,6 +57,9 @@ class TPF_Slider_Pro {
         // Add pro CSS variables to slider output
         add_filter('tpf_slider_inline_styles', array($this, 'add_pro_styles'), 10, 3);
 
+        // Modify slides_to_show for coverflow effect
+        add_filter('tpf_slider_pre_render_settings', array($this, 'adjust_coverflow_settings'));
+
         // Add pro indicator to admin
         add_action('admin_notices', array($this, 'pro_active_notice'));
     }
@@ -181,6 +184,19 @@ class TPF_Slider_Pro {
             }
         ";
         return $styles . $pro_styles;
+    }
+
+    /**
+     * Adjust settings for coverflow effect
+     * Coverflow handles its own layout - force slides_to_show to 1
+     * so the base slider doesn't interfere
+     */
+    public function adjust_coverflow_settings($settings) {
+        if (isset($settings['transition']) && $settings['transition'] === 'coverflow') {
+            // Coverflow manages its own display - set to 1 to avoid carousel mode interference
+            $settings['slides_to_show'] = 1;
+        }
+        return $settings;
     }
 
     /**
