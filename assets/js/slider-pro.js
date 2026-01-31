@@ -77,8 +77,13 @@
                 self.goToSlide($slider, index);
             });
 
-            // Click on side slides to navigate
+            // Click on side slides to navigate (but not on buttons)
             $slides.on('click', function(e) {
+                // Ignore clicks on buttons (enlarge, info, link, etc.)
+                if ($(e.target).closest('button, a, .tpf-enlarge-btn, .tpf-info-btn, .tpf-link-btn').length) {
+                    return;
+                }
+
                 var $slide = $(this);
                 var clickedIndex = $slide.data('index');
                 var currentIndex = $slider.data('coverflow-index');
