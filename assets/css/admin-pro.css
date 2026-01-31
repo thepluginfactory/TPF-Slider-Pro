@@ -58,3 +58,18 @@ input[type="color"]:hover {
     font-weight: 600;
     border-radius: 2px;
 }
+
+/* Duplicate Button */
+.tpf-duplicate-slider .dashicons {
+    vertical-align: middle;
+}
+
+/* Spinning animation for loading state */
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

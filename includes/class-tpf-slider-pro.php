@@ -62,6 +62,12 @@ class TPF_Slider_Pro {
 
         // Add pro indicator to admin
         add_action('admin_notices', array($this, 'pro_active_notice'));
+
+        // Add duplicate slider button to slider list
+        add_action('tpf_slider_list_actions', array($this, 'add_duplicate_button'));
+
+        // AJAX handler for duplicating sliders
+        add_action('wp_ajax_tpf_duplicate_slider', array($this, 'ajax_duplicate_slider'));
     }
 
     /**
@@ -268,5 +274,102 @@ class TPF_Slider_Pro {
             </div>
             <?php
         }
+    }
+
+    /**
+     * Add duplicate button to slider list
+     */
+    public function add_duplicate_button($slider) {
+        ?>
+        <button type="button" class="button button-small tpf-duplicate-slider" data-id="<?php echo esc_attr($slider->id); ?>">
+            <span class="dashicons dashicons-admin-page" style="font-size: 14px; line-height: 1.4;"></span> Duplicate
+        </button>
+        <?php
+    }
+
+    /**
+     * AJAX handler for duplicating a slider
+     */
+    public function ajax_duplicate_slider() {
+        // Verify nonce
+        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'tpf_slider_nonce')) {
+            wp_send_json_error('Invalid nonce');
+        }
+
+        // Check permissions
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('Permission denied');
+        }
+
+        // Get slider ID
+        $slider_id = isset($_POST['slider_id']) ? intval($_POST['slider_id']) : 0;
+        if (!$slider_id) {
+            wp_send_json_error('Invalid slider ID');
+        }
+
+        global $wpdb;
+        $sliders_table = $wpdb->prefix . 'tpf_sliders';
+        $slides_table = $wpdb->prefix . 'tpf_slides';
+
+        // Get original slider
+        $original_slider = $wpdb->get_row($wpdb->prepare(
+            "SELECT * FROM $sliders_table WHERE id = %d",
+            $slider_id
+        ));
+
+        if (!$original_slider) {
+            wp_send_json_error('Slider not found');
+        }
+
+        // Create new slider with "(Copy)" appended to name
+        $new_name = $original_slider->name . ' (Copy)';
+        $wpdb->insert(
+            $sliders_table,
+            array(
+                'name' => $new_name,
+                'settings' => $original_slider->settings,
+                'created_at' => current_time('mysql')
+            ),
+            array('%s', '%s', '%s')
+        );
+
+        $new_slider_id = $wpdb->insert_id;
+
+        if (!$new_slider_id) {
+            wp_send_json_error('Failed to create slider copy');
+        }
+
+        // Get original slides
+        $original_slides = $wpdb->get_results($wpdb->prepare(
+            "SELECT * FROM $slides_table WHERE slider_id = %d ORDER BY sort_order ASC",
+            $slider_id
+        ));
+
+        // Duplicate all slides
+        foreach ($original_slides as $slide) {
+            $wpdb->insert(
+                $slides_table,
+                array(
+                    'slider_id' => $new_slider_id,
+                    'image_id' => $slide->image_id,
+                    'image_url' => $slide->image_url,
+                    'title' => $slide->title,
+                    'subtitle' => $slide->subtitle,
+                    'link_url' => $slide->link_url,
+                    'link_target' => $slide->link_target,
+                    'link_text' => $slide->link_text,
+                    'show_enlarge' => $slide->show_enlarge,
+                    'sort_order' => $slide->sort_order,
+                    'created_at' => current_time('mysql')
+                ),
+                array('%d', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s')
+            );
+        }
+
+        wp_send_json_success(array(
+            'message' => 'Slider duplicated successfully',
+            'new_slider_id' => $new_slider_id,
+            'new_name' => $new_name
+        ));
     }
 }

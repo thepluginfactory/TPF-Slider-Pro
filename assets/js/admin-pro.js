@@ -23,4 +23,43 @@ jQuery(document).ready(function($) {
         return originalAjax.apply(this, arguments);
     };
 
+    // Duplicate slider handler
+    $(document).on('click', '.tpf-duplicate-slider', function(e) {
+        e.preventDefault();
+
+        var $button = $(this);
+        var sliderId = $button.data('id');
+        var originalText = $button.html();
+
+        if (!confirm('Are you sure you want to duplicate this slider?')) {
+            return;
+        }
+
+        // Disable button and show loading
+        $button.prop('disabled', true).html('<span class="dashicons dashicons-update" style="font-size: 14px; line-height: 1.4; animation: rotation 1s infinite linear;"></span> Duplicating...');
+
+        $.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: {
+                action: 'tpf_duplicate_slider',
+                slider_id: sliderId,
+                nonce: tpfSliderAdmin.nonce
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Reload page to show the new slider
+                    location.reload();
+                } else {
+                    alert('Error: ' + (response.data || 'Failed to duplicate slider'));
+                    $button.prop('disabled', false).html(originalText);
+                }
+            },
+            error: function() {
+                alert('Error: Failed to duplicate slider');
+                $button.prop('disabled', false).html(originalText);
+            }
+        });
+    });
+
 });
