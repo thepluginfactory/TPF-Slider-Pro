@@ -39,6 +39,7 @@
     visibility: hidden;
     overflow: hidden;
     border-radius: var(--border-radius, 0);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
     /* Default hidden state - centered */
     transform: translateX(-50%) scale(0.5);
 }
